@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="EncryptorCLI.Factory">
+      <HintPath>../libs/EncryptorCLI.Factory.dll</HintPath>
+      <Private>True</Private> 
+    </Reference>
+  </ItemGroup>
+
+</Project>
