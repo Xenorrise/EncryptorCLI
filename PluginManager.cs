@@ -8,10 +8,10 @@ namespace EncryptorCLI.PluginManagement;
 public static class PluginManager
 {
     private static readonly List<EncryptorPluginFactory> _factories = [];
-	//private static readonly Dictionary<EncryptorPluginFactory, IEncryptorPlugin> _activePlugins = [];
     private static readonly string defaultPath = Path.Combine(AppContext.BaseDirectory, "plugins");
-
-	public static IEncryptorPlugin UseFactory(int pluginIndex) => _factories[pluginIndex].CreatePlugin();
+    private static int _pluginCount = 0;
+    public static int PluginCount => _pluginCount;
+	public static IEncryptorPlugin UseFactory(int pluginIndex, byte[] key) => _factories[pluginIndex].CreatePlugin(key);
     public static void LoadInstalledPlugins()
 	{
         LoadPlugins(defaultPath);
@@ -44,6 +44,7 @@ public static class PluginManager
                     if (!_factories.Any(f => f.PluginName == factory.PluginName))
                     {
                         _factories.Add(factory);
+						_pluginCount++;
                     }
                     else
                     {
@@ -77,14 +78,14 @@ public static class PluginManager
         }
 	}
 
-    public static void UninstallPlugin(string pluginName)
+    public static void UninstallPlugin(int pluginChoice)
     {
-        var factory = _factories.FirstOrDefault(p => p.PluginName == pluginName);
+        var factory = _factories[pluginChoice];
         if (factory != null)
         {
+            File.Delete(Path.Combine(defaultPath, factory.PluginName) + ".dll");
+            Console.WriteLine($"Плагин {factory.PluginName} выгружен (деактивирован).");
             _factories.Remove(factory);
-			// Добавить выгрузку плагинов
-            Console.WriteLine($"Плагин {pluginName} выгружен (деактивирован).");
         }
     }
 
